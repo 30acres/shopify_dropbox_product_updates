@@ -88,7 +88,7 @@ class ProductData
       product.body_html = desc
     end
 
-    product.title = product.title.gsub('  ',' - ').titleize
+    product.title = product.title.gsub('  ',' ').titleize
 
     tags = %w{  
        Country
