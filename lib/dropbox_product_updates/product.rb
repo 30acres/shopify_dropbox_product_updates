@@ -1,10 +1,14 @@
 module DropboxProductUpdates
-  module Product
-    def self.all_products_array(params={})
+  class Product
+
+    def self.all_products_array
+      # binding.pry
+      # limit = 250
+      # params = {}
+      # find_params = { limit: limit }.merge(params)
       p_arr = []
-      find_params = { limit: limit }.merge(params)
       pages.times do |p|
-        p_arr << ShopifyAPI::Product.find(:all, params: find_params.merge({ page: p}) ) 
+        p_arr << ShopifyAPI::Product.find(:all)
       end
       p_arr
     end
@@ -27,4 +31,3 @@ module DropboxProductUpdates
     end
   end
 end
-

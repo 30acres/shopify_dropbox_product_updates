@@ -28,9 +28,15 @@ class ProductData
 
   def get_csv
     CSV.parse(file, { headers: true }) do |product|
-      RawDatum.create(data: product.to_hash.to_json, client_id: 0, status: 9)
+      # encoded = CSV.parse(product).to_hash.to_json
+      encoded = product.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
+      encoded_more = encoded.to_json
+      puts encoded
+      RawDatum.create(data: encoded_more, client_id: 0, status: 9)
+      puts product
     end
     begin
+      ## this does not belong here
       process_products
     rescue
       delete_datum
@@ -64,49 +70,78 @@ class ProductData
         shopify_product.variants.each do |v|
           matches = RawDatum.where(status: 9).where("data->>'*ItemCode' = ?", v.sku)
           if matches.any?
-            binding.pry
             match = matches.first
-            product = match.product
+            ## should be its own class
+            # binding.pry 
+            ProductData.update_product_descriptions(v, match)
           end
         end
       end
     end
   end
 
-  def has_dropbox_description
-    # if dropbox_images.any?
-    #   puts "Found match (#{@product.title})"
-    #   match = true
-    # else
-    #   puts "No match (#{@product.title})"
-    #   match = false
-    # end
-    # match
-  end
+  def self.update_product_descriptions(variant, match)
+    product = ShopifyAPI::Product.find(variant.product_id)
 
-  def update_descriptions
-    # if has_dropbox_images
-    #   upload_images
-    # end
-  end
+    if match.data["OverwriteShopifyDescOnImport"] == 'Yes'
+      desc = match.data["SalesDescription"]
+      product.body_html = desc
+    end
 
-  def dropbox_images
-    # if @product.variants.any? and @product.variants.first.sku.length >= 5 ## Just to make sure its not an accident
-    #   connect_to_source.metadata(@path)['contents'].select { |image| image['path'].include?(@product.variants.first.sku + '-')   }
-    # else
-    #   []
-    # end
-  end
+    product.title = product.title.gsub('  ',' - ').titleize
 
-  def upload_images
-    # remove_all_images if dropbox_images.any?
-    # dropbox_images.each do |di|
-    #   url = connect_to_source.media(di['path'])['url']
-    #   if url
-    #     image = ShopifyAPI::Image.new(product_id: @product.id, src: url)
-    #     image.save!
-    #   end
-    # end
-  end
+    tags = %w{  
+       Country
+       Category
+       SubCategory1
+       SC1Singular
+       SubCategory2
+       SpecialFeatures
+       Condition
+       OuterConditionDetail
+       InnerConditionDetail
+       SoleConditionDetail
+       SourceCountrySize
+       AustralianSize
+       ShoeHeelHeight
+       BagW
+       BagH
+       BagD
+       ClothingLength
+       SimpleColour
+       DetailColour
+       SimplePattern
+       SimpleMaterial
+       DetailMaterial
+       LiningMaterial
+       SoleMaterial
+       Weight(grams)
+       Season
+       HasTag
+       HasOriginalBox
+       HasDustbag
+       WeLove
+       Vintage
+       Partywear
+       Workwear
+       CasualWear
+       OnSale
+       Gender
+       CommunityLoves
+       LocationTracking
+       IsConsigned
+       ProvidedBy
+       Authentication
+       PhotoDone
+    }
 
+    product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag]}" : nil  }.join(',')
+    puts "#{product.title} :: UPDATED!!!"
+    #binding.pry
+    #
+    product.save!
+
+    ##metafields
+
+  end
 end
