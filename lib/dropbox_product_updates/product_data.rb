@@ -91,48 +91,33 @@ class ProductData
     product.title = product.title.gsub('  ',' ').titleize
 
     tags = %w{  
-       Country
-       Category
-       SubCategory1
-       SC1Singular
-       SubCategory2
-       SpecialFeatures
-       Condition
-       OuterConditionDetail
-       InnerConditionDetail
-       SoleConditionDetail
-       SourceCountrySize
-       AustralianSize
-       ShoeHeelHeight
-       BagW
-       BagH
-       BagD
-       ClothingLength
-       SimpleColour
-       DetailColour
-       SimplePattern
-       SimpleMaterial
-       DetailMaterial
-       LiningMaterial
-       SoleMaterial
-       Weight(grams)
-       Season
-       HasTag
-       HasOriginalBox
-       HasDustbag
-       WeLove
-       Vintage
-       Partywear
-       Workwear
-       CasualWear
-       OnSale
-       Gender
-       CommunityLoves
-       LocationTracking
-       IsConsigned
-       ProvidedBy
-       Authentication
-       PhotoDone
+    Category
+    Sub-category 1
+    Condition
+    Country
+    Source Country Size
+    Australian Size
+    Heel Height
+    Colour
+    Pattern
+    Material
+    Gender
+    Season
+    Vintage
+    Partywear
+    Workwear
+    Casual Wear
+    We Love
+    Community Loves
+    On Sale
+    Recommended Retail Price
+    LocationTracking
+    IsConsigned
+    NumStockAvailable
+    IsDataValid
+    PhotoDone
+    OverwriteShopifyDescOnImport
+    Sold by
     }
 
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag]}" : nil  }.join(',')
