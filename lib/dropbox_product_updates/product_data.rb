@@ -50,7 +50,7 @@ class ProductData
   end
 
   def path
-    connect_to_source.metadata(@path)['contents'][0]['path']
+    connect_to_source.metadata(@path)['contents'][1]['path']
   end
 
   def file
