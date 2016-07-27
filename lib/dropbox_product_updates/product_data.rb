@@ -12,6 +12,9 @@ module ImportProductData
       ## update the descriptions
 
       ProductData.process_products
+
+      ProductData.delete_datum
+     
       # DropboxProductUpdates::Product.all_products_array.each do |page|
       #   page.each do |product|
       #     binding.pry
@@ -37,16 +40,9 @@ class ProductData
       RawDatum.create(data: encoded_more, client_id: 0, status: 9)
       puts product
     end
-    begin
-      ## this does not belong here
-      process_products
-    rescue
-      delete_datum
-    end
-    delete_datum
   end
 
-  def delete_datum
+  def self.delete_datum
     ## so cheap and dirty
     RawDatum.where(status: 9).destroy_all
   end
