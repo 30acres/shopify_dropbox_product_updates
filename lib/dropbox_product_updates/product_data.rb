@@ -70,6 +70,7 @@ class ProductData
     DropboxProductUpdates::Product.all_products_array.each do |page|
       page.each do |shopify_product|
         shopify_product.variants.each do |v|
+          binding.pry
           matches = RawDatum.where(status: 9).where("data->>'*ItemCode' = ?", v.sku)
           if matches.any?
             match = matches.first
