@@ -123,11 +123,12 @@ class ProductData
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag]}" : nil  }.join(',')
     puts "#{product.title} :: UPDATED!!!"
     unless match.data["Published"] == 'TRUE'
-      product.published_at = Time.now - 1.day
+      product.published_at = nil
     end
     #binding.pry
-    #
+    puts '====================================='
     product.save!
+    puts '=== S A V E D ============================='
 
     ##metafields
 
