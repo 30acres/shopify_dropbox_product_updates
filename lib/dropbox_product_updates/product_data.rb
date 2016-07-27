@@ -83,12 +83,12 @@ class ProductData
   def self.update_product_descriptions(variant, match)
     product = ShopifyAPI::Product.find(variant.product_id)
 
-    if match.data["OverwriteShopifyDescOnImport"] == 'Yes'
+    # if match.data["OverwriteShopifyDescOnImport"] == 'Yes'
       desc = match.data["SalesDescription"]
       product.body_html = desc
-    end
+    # end
 
-    product.title = product.title.gsub('  ',' ').titleize
+    product.title = product.title.gsub('  ',' ').split.map(&:capitalize).join(' ')
 
     tags = %w{  
     Category
@@ -118,10 +118,14 @@ class ProductData
     PhotoDone
     OverwriteShopifyDescOnImport
     Sold by
+    Published
     }
 
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag]}" : nil  }.join(',')
     puts "#{product.title} :: UPDATED!!!"
+    unless match.data["Published"] == 'TRUE'
+      product.published_at = Time.now - 1.day
+    end
     #binding.pry
     #
     product.save!
