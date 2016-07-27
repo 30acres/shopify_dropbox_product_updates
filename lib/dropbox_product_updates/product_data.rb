@@ -89,7 +89,6 @@ class ProductData
     # end
 
     product.title = product.title.gsub('  ',' ').split.map(&:capitalize).join(' ')
-
     tags = %w{  
     Category
     Sub-category 1
