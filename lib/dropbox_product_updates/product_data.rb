@@ -11,11 +11,11 @@ module ImportProductData
       ## parse the rows
       ## update the descriptions
 
-      # DropboxProductImports::Product.all_products_array.each do |page|
-      #   page.each do |product|
-      #     ProductData.new(product,data,token).update_descriptions
-      #   end
-      # end
+      DropboxProductImports::Product.all_products_array.each do |page|
+        page.each do |product|
+          ProductData.new(product,data,token).update_descriptions
+        end
+      end
     end
   end
 end
@@ -71,8 +71,6 @@ class ProductData
           matches = RawDatum.where(status: 9).where("data->>'*ItemCode' = ?", v.sku)
           if matches.any?
             match = matches.first
-            ## should be its own class
-            # binding.pry 
             ProductData.update_product_descriptions(v, match)
           end
         end
