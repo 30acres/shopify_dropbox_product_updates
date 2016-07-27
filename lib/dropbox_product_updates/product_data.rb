@@ -66,7 +66,7 @@ class ProductData
     DropboxClient.new(@token)
   end
 
-  def process_products
+  def self.process_products
     DropboxProductUpdates::Product.all_products_array.each do |page|
       page.each do |shopify_product|
         shopify_product.variants.each do |v|
