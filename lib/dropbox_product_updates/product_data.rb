@@ -11,7 +11,7 @@ module ImportProductData
       ## parse the rows
       ## update the descriptions
 
-      DropboxProductImports::Product.all_products_array.each do |page|
+      DropboxProductUpdates::Product.all_products_array.each do |page|
         page.each do |product|
           ProductData.new(product,data,token).update_descriptions
         end
