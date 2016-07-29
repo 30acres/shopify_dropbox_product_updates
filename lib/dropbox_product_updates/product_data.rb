@@ -140,9 +140,9 @@ class ProductData
     product.tags = product.tags + ', ImportCheck'
 
     product.options = [
-      ShopifyAPI::Option.new(name: 'Size'), 
-      ShopifyAPI::Option.new(name: 'Colour'),
-      ShopifyAPI::Option.new(name: 'Material')
+      { name: 'Size' }, 
+      { name: 'Colour' },
+      { name: 'Material'}
     ]
     # binding.pry
     product.variants = []
@@ -155,6 +155,7 @@ class ProductData
     else
       product.published_at = nil
     end
+    puts product.inspect
 
     puts '====================================='
     puts product
@@ -175,6 +176,7 @@ class ProductData
         weight_unit: "g"
       )
     ]
+    puts product.inspect
 
     product.save!
 
