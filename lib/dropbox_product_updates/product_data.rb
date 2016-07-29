@@ -160,9 +160,7 @@ class ProductData
       )
     ]
 
-
-
-    binding.pry
+    # binding.pry
     
     puts "#{product.title} :: UPDATED!!!"
     if match.data["Publish on Website"] == 'Yes'
@@ -171,11 +169,9 @@ class ProductData
       product.published_at = nil
     end
 
-    
     puts '====================================='
     product.save!
     puts '=== S A V E D ============================='
-
 
   end
 end
