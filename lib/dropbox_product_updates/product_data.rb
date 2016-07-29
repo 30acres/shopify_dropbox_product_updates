@@ -149,14 +149,14 @@ class ProductData
       ShopifyAPI::Variant.new(
         price: match.data["Price"].gsub('$','').gsub(',','').to_s.strip,
         sku: match.data["*ItemCode"],
-        grams: match.data["Weight (grams)"],
+        grams: match.data["Weight (grams)"].to_i,
         compare_at_price: match.data["Price (before Sale)"],
         option1: [match.data["Source Country Size"],match.data["Source Country Size"]].join('/'),
         option2: match.data["Colour"],
         option3: match.data["Material"],
         inventory_quantity: match.data["NumStockAvailable"],
-        weight: match.data["Weight (grams)"],
-        weight_unit: 'grams'
+        weight: match.data["Weight (grams)"].to_i/100,
+        weight_unit: "g"
       )
     ]
 
