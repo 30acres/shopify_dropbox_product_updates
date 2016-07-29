@@ -163,7 +163,7 @@ class ProductData
 
 
 
-    # binding.pry
+    binding.pry
     
     puts "#{product.title} :: UPDATED!!!"
     if match.data["Publish on Website"] == 'Yes'
