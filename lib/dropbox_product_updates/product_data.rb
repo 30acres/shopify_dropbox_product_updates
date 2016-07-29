@@ -145,7 +145,8 @@ class ProductData
       { name: 'Material'}
     ]
     # binding.pry
-    product.variants = []
+    
+    # product.variants = []
     product.save!
     # binding.pry
     
