@@ -158,11 +158,12 @@ class ProductData
     puts product.inspect
 
     puts '====================================='
+    puts '====================================='
     puts product
     product.save!
-    puts '=== S A V E D ============================='
+    puts '=== P R O D U C T S A V E D ============================='
 
-    product.variants = [
+    product_variants = [
       ShopifyAPI::Variant.new(
         price: match.data["Price"].gsub('$','').gsub(',','').to_s.strip,
         sku: match.data["*ItemCode"],
@@ -176,9 +177,16 @@ class ProductData
         weight_unit: "g"
       )
     ]
+
+    puts product_variants
+    product.variants = product_variants
+
+    puts '=== V A R I A N T S A V E D ============================='
     puts product.inspect
 
     product.save!
+    puts '====================================='
+    puts '====================================='
 
   end
 end
