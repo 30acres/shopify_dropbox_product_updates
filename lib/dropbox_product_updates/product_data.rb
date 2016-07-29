@@ -142,7 +142,7 @@ class ProductData
     product.option_1_name = 'Size'
     product.option_2_name = 'Colour'
     product.option_3_name = 'Material'
-
+    binding.pry
     product.variants = [
       ShopifyAPI::Variant.new(
         price: match.data["Price"].gsub('$','').to_s.strip,
