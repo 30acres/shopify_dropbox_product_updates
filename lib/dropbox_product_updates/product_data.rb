@@ -185,6 +185,7 @@ class ProductData
         weight_unit: "g"
       )
     puts v.inspect
+    binding.pry
     v.save!
     puts '====================================='
 
