@@ -173,7 +173,7 @@ class ProductData
         option2: match.data["Colour"],
         option3: match.data["Material"],
         inventory_quantity: match.data["NumStockAvailable"],
-        weight: match.data["Weight (grams)"].to_i/100,
+        # weight: match.data["Weight (grams)"].to_i/100,
         weight_unit: "g"
       )
     ]
@@ -181,6 +181,7 @@ class ProductData
     puts product_variants.inspect
     puts '====================================='
     product.variants = product_variants
+    binding.pry
 
     puts product.inspect
 
