@@ -80,15 +80,12 @@ class ProductData
   def self.update_product_descriptions(variant, match)
     product = ShopifyAPI::Product.find(variant.product_id)
 
-    # if match.data["OverwriteShopifyDescOnImport"] == 'Yes'
       desc = match.data["Product Description"]
       product.body_html = desc
-      # binding.pry
       product.title = product.title.gsub('  ',' ').split.map(&:capitalize).join(' ')
       
       product.metafields_global_title_tag = product.title
       product.metafields_global_description_tag = desc
-    # end
 
     tags = %w{  
     Category
@@ -148,13 +145,11 @@ class ProductData
       product.published_at = nil
     end
 
-    # binding.pry
     
     puts '====================================='
     product.save!
     puts '=== S A V E D ============================='
 
-    ##metafields
 
   end
 end
