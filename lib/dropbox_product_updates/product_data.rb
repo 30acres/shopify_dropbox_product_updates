@@ -168,8 +168,8 @@ class ProductData
       v.grams = match.data["Weight (grams)"].to_i
       v.compare_at_price = match.data["Price (before Sale)"]
       v.option1 = [match.data["Source Country Size"],match.data["Source Country Size"]].join('/')
-      v.option2 = match.data["Colour"]
-       v.option3 = match.data["Material"]
+      v.option2 = match.data["Colour"].to_s.blank? ? 'N/A' : match.data["Colour"].to_s
+       v.option3 = match.data["Material"].to_s.blank? ? 'N/A' : match.data["Material"]
         v.inventory_quantity = match.data["NumStockAvailable"]
         v.old_inventory_quantity = match.data["NumStockAvailable"]
         v.requires_shipping = true
