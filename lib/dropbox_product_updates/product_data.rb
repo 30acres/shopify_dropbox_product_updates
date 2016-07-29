@@ -145,8 +145,6 @@ class ProductData
       ShopifyAPI::Option.new(name: 'Material')
     ]
     
-    # product.variants = []
-    product.save!
     # binding.pry
     
     puts "#{product.title} :: UPDATED!!!"
@@ -160,7 +158,6 @@ class ProductData
     puts '====================================='
     puts '====================================='
     puts product
-    product.save!
     puts '=== P R O D U C T S A V E D ============================='
 
      v = ShopifyAPI::Variant.new(
@@ -186,7 +183,9 @@ class ProductData
       )
     puts v.inspect
     binding.pry
-    v.save!
+    product.variants = [v]
+    product.save!
+    # v.save!
     puts '====================================='
 
     # puts product_variants.inspect
