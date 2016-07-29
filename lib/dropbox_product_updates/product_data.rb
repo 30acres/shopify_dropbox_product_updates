@@ -178,14 +178,14 @@ class ProductData
       )
     ]
 
-    puts product_variants
+    puts product_variants.inspect
+    puts '====================================='
     product.variants = product_variants
 
-    puts '=== V A R I A N T S A V E D ============================='
     puts product.inspect
 
     product.save!
-    puts '====================================='
+    puts '=== V A R I A N T S A V E D ============================='
     puts '====================================='
 
   end
