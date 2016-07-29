@@ -159,30 +159,30 @@ class ProductData
     puts '====================================='
     puts product
     puts '=== P R O D U C T S A V E D ============================='
-
-     v = ShopifyAPI::Variant.new(
-        product_id: product.id,
-        price: match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f,
-        sku: match.data["*ItemCode"],
-        grams: match.data["Weight (grams)"].to_i,
-        compare_at_price: match.data["Price (before Sale)"],
-        option1: [match.data["Source Country Size"],match.data["Source Country Size"]].join('/'),
-        option2: match.data["Colour"],
-        option3: match.data["Material"],
-        inventory_quantity: match.data["NumStockAvailable"],
-        old_inventory_quantity: match.data["NumStockAvailable"],
-        requires_shipping: true,
-        barcode: nil,
-        taxable: true,
-        position: 1,
-        inventory_policy: 'deny',
-        fulfillment_service: "manual",
-        inventory_management: "shopify",
+    
+    v = product.variants.first
+     # v = ShopifyAPI::Variant.new
+    v.product_id = product.id
+      v.price = match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f
+      v.sku = match.data["*ItemCode"]
+      v.grams = match.data["Weight (grams)"].to_i
+      v.compare_at_price = match.data["Price (before Sale)"]
+      v.option1 = [match.data["Source Country Size"],match.data["Source Country Size"]].join('/')
+      v.option2 = match.data["Colour"]
+       v.option3 = match.data["Material"]
+        v.inventory_quantity = match.data["NumStockAvailable"]
+        v.old_inventory_quantity = match.data["NumStockAvailable"]
+        v.requires_shipping = true
+        v.barcode = nil
+        v.taxable = true
+        v.position = 1
+        v.inventory_policy = 'deny'
+        v.fulfillment_service = "manual"
+        v.inventory_management = "shopify"
         # weight: match.data["Weight (grams)"].to_i/100,
-        weight_unit: "g"
-      )
+        v.weight_unit = "g"
     puts v.inspect
-    binding.pry
+    # binding.pry
     product.variants = [v]
     product.save!
     # v.save!
