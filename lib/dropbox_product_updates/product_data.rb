@@ -140,14 +140,13 @@ class ProductData
     product.tags = product.tags + ', ImportCheck'
 
     product.options = [
-      { name: 'Size' }, 
-      { name: 'Colour' },
-      { name: 'Material' }
+      ShopifyAPI::Option.new(name: 'Size'), 
+      ShopifyAPI::Option.new(name: 'Colour'),
+      ShopifyAPI::Option.new(name: 'Material')
     ]
     # binding.pry
     product.variants = [
-      # ShopifyAPI::Variant.new(
-      {
+      ShopifyAPI::Variant.new(
         price: match.data["Price"].gsub('$','').gsub(',','').to_s.strip,
         sku: match.data["*ItemCode"],
         grams: match.data["Weight (grams)"],
@@ -158,7 +157,7 @@ class ProductData
         inventory_quantity: match.data["NumStockAvailable"],
         weight: match.data["Weight (grams)"],
         weight_unit: 'grams'
-      }
+      )
     ]
 
 
