@@ -165,7 +165,7 @@ class ProductData
 
     product_variants = [
       ShopifyAPI::Variant.new(
-        price: match.data["Price"].gsub('$','').gsub(',','').to_s.strip,
+        price: match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f,
         sku: match.data["*ItemCode"],
         grams: match.data["Weight (grams)"].to_i,
         compare_at_price: match.data["Price (before Sale)"],
@@ -173,6 +173,14 @@ class ProductData
         option2: match.data["Colour"],
         option3: match.data["Material"],
         inventory_quantity: match.data["NumStockAvailable"],
+        old_inventory_quantity: match.data["NumStockAvailable"],
+        requires_shipping: true,
+        barcode: nil,
+        taxable: true,
+        position: 1,
+        inventory_policy: 'deny',
+        fulfillment_service: "manual",
+        inventory_management: "shopify",
         # weight: match.data["Weight (grams)"].to_i/100,
         weight_unit: "g"
       )
@@ -181,7 +189,7 @@ class ProductData
     puts product_variants.inspect
     puts '====================================='
     product.variants = product_variants
-    binding.pry
+    # binding.pry
 
     puts product.inspect
 
