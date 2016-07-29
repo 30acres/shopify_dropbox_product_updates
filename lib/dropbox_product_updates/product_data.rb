@@ -148,7 +148,7 @@ class ProductData
       product.published_at = nil
     end
 
-    binding.pry
+    # binding.pry
     
     puts '====================================='
     product.save!
