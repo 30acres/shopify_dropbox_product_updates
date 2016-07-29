@@ -139,13 +139,15 @@ class ProductData
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag]}" : nil  }.join(',')
     product.tags = product.tags + ', ImportCheck'
 
-    product.option_1_name = 'Size'
-    product.option_2_name = 'Colour'
-    product.option_3_name = 'Material'
-    binding.pry
+    product.options = [
+      { name: 'Size' }, 
+      { name: 'Colour' },
+      { name: 'Material' }
+    ]
+    # binding.pry
     product.variants = [
       ShopifyAPI::Variant.new(
-        price: match.data["Price"].gsub('$','').to_s.strip,
+        price: match.data["Price"].gsub('$','').gsub(',','').to_s.strip,
         sku: match.data["*ItemCode"],
         grams: match.data["Weight (grams)"],
         compare_at_price: match.data["Price (before Sale)"],
@@ -153,7 +155,8 @@ class ProductData
         option2: match.data["Colour"],
         option3: match.data["Material"],
         inventory_quantity: match.data["NumStockAvailable"],
-        weight: 'grams'
+        weight: match.data["Weight (grams)"],
+        weight_unit: 'grams'
       )
     ]
 
