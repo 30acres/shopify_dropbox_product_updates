@@ -139,7 +139,7 @@ class ProductData
     product.tags = product.tags + ', ImportCheck'
     puts "#{product.title} :: UPDATED!!!"
     if match.data["Publish on Website"] == 'Yes'
-      product.published_at = Datetime.now
+      product.published_at = Time.now
     else
       product.published_at = nil
     end
