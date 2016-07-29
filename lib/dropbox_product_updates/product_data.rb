@@ -66,9 +66,9 @@ class ProductData
     DropboxProductUpdates::Product.all_products_array.each do |page|
       page.each do |shopify_product|
         shopify_product.variants.each do |v|
-          # binding.pry
           matches = RawDatum.where(status: 9).where("data->>'*ItemCode' = ?", v.sku)
           if matches.any?
+            sleep(1)
             match = matches.first
             ProductData.update_product_descriptions(v, match)
           end
@@ -81,7 +81,7 @@ class ProductData
     product = ShopifyAPI::Product.find(variant.product_id)
 
     # if match.data["OverwriteShopifyDescOnImport"] == 'Yes'
-      desc = match.data["SalesDescription"]
+      desc = match.data["Product Description"]
       product.body_html = desc
     # end
 
@@ -89,16 +89,34 @@ class ProductData
     tags = %w{  
     Category
     Sub-category 1
+    Sub-category 2
     Condition
+    Outer Condition Detail
+    Inner Condition Detail
+    Sole Condition Detail
     Country
     Source Country Size
     Australian Size
+    Width
+    Height
+    Depth
     Heel Height
     Colour
+    Detailed Colour
+    Detailed Material
+    Lining Material
     Pattern
-    Material
     Gender
     Season
+    Has Tag
+    Has Original Box
+    Has Dustbag
+    Vintage
+    Price	
+    Price (before Sale)	
+    IsConsigned
+    NumStockAvailable
+    Publish on Website
     Vintage
     Partywear
     Workwear
@@ -120,7 +138,9 @@ class ProductData
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag]}" : nil  }.join(',')
     product.tags = product.tags + ', ImportCheck'
     puts "#{product.title} :: UPDATED!!!"
-    unless match.data["Published"] == 'TRUE'
+    if match.data["Publish on Website"] == 'Yes'
+      product.published_at = Datetime.now
+    else
       product.published_at = nil
     end
     #binding.pry
