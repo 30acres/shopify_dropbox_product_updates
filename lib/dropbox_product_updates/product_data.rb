@@ -83,6 +83,7 @@ class ProductData
     # if match.data["OverwriteShopifyDescOnImport"] == 'Yes'
       desc = match.data["Product Description"]
       product.body_html = desc
+      binding.pry
     # end
 
     product.title = product.title.gsub('  ',' ').split.map(&:capitalize).join(' ')
@@ -143,7 +144,9 @@ class ProductData
     else
       product.published_at = nil
     end
-    #binding.pry
+
+    binding.pry
+    
     puts '====================================='
     product.save!
     puts '=== S A V E D ============================='
