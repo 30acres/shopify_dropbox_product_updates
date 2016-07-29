@@ -140,11 +140,10 @@ class ProductData
     product.tags = product.tags + ', ImportCheck'
 
     product.options = [
-      { name: 'Size' }, 
-      { name: 'Colour' },
-      { name: 'Material'}
+      ShopifyAPI::Option.new(name: 'Size'), 
+      ShopifyAPI::Option.new(name: 'Colour'),
+      ShopifyAPI::Option.new(name: 'Material')
     ]
-    # binding.pry
     
     # product.variants = []
     product.save!
