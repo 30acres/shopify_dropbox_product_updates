@@ -83,10 +83,13 @@ class ProductData
     # if match.data["OverwriteShopifyDescOnImport"] == 'Yes'
       desc = match.data["Product Description"]
       product.body_html = desc
-      binding.pry
+      # binding.pry
+      product.title = product.title.gsub('  ',' ').split.map(&:capitalize).join(' ')
+      
+      product.metafields_global_title_tag = product.title
+      product.metafields_global_description_tag = desc
     # end
 
-    product.title = product.title.gsub('  ',' ').split.map(&:capitalize).join(' ')
     tags = %w{  
     Category
     Sub-category 1
