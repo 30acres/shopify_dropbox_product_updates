@@ -170,6 +170,7 @@ class ProductData
     end
 
     puts '====================================='
+    puts product
     product.save!
     puts '=== S A V E D ============================='
 
