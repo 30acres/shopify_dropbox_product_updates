@@ -145,6 +145,22 @@ class ProductData
       ShopifyAPI::Option.new(name: 'Material')
     ]
     # binding.pry
+    product.variants = []
+    product.save!
+    # binding.pry
+    
+    puts "#{product.title} :: UPDATED!!!"
+    if match.data["Publish on Website"] == 'Yes'
+      product.published_at = Time.now
+    else
+      product.published_at = nil
+    end
+
+    puts '====================================='
+    puts product
+    product.save!
+    puts '=== S A V E D ============================='
+
     product.variants = [
       ShopifyAPI::Variant.new(
         price: match.data["Price"].gsub('$','').gsub(',','').to_s.strip,
@@ -160,19 +176,7 @@ class ProductData
       )
     ]
 
-    # binding.pry
-    
-    puts "#{product.title} :: UPDATED!!!"
-    if match.data["Publish on Website"] == 'Yes'
-      product.published_at = Time.now
-    else
-      product.published_at = nil
-    end
-
-    puts '====================================='
-    puts product
     product.save!
-    puts '=== S A V E D ============================='
 
   end
 end
