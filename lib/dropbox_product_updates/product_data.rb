@@ -146,7 +146,8 @@ class ProductData
     ]
     # binding.pry
     product.variants = [
-      ShopifyAPI::Variant.new(
+      # ShopifyAPI::Variant.new(
+      {
         price: match.data["Price"].gsub('$','').gsub(',','').to_s.strip,
         sku: match.data["*ItemCode"],
         grams: match.data["Weight (grams)"],
@@ -157,8 +158,10 @@ class ProductData
         inventory_quantity: match.data["NumStockAvailable"],
         weight: match.data["Weight (grams)"],
         weight_unit: 'grams'
-      )
+      }
     ]
+
+
 
     # binding.pry
     
