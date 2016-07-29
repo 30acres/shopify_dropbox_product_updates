@@ -139,7 +139,25 @@ class ProductData
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag]}" : nil  }.join(',')
     product.tags = product.tags + ', ImportCheck'
 
-    binding.pry
+    product.option_1_name = 'Size'
+    product.option_2_name = 'Colour'
+    product.option_3_name = 'Material'
+
+    product.variants = [
+      ShopifyAPI::Variant.new(
+        price: match.data["Price"].gsub('$','').to_s.strip,
+        sku: match.data["*ItemCode"],
+        grams: match.data["Weight (grams)"],
+        compare_at_price: match.data["Price (before Sale)"],
+        option1: [match.data["Source Country Size"],match.data["Source Country Size"]].join('/'),
+        option2: match.data["Colour"],
+        option3: match.data["Material"],
+        inventory_quantity: match.data["NumStockAvailable"],
+        weight: 'grams'
+      )
+    ]
+
+    # binding.pry
     
     puts "#{product.title} :: UPDATED!!!"
     if match.data["Publish on Website"] == 'Yes'
