@@ -84,7 +84,7 @@ class ProductData
         end
       end
     end
-    ### any with no match - create
+    ### any with no match - create 
     new_matches = RawDatum.where(status: 9) ##.where("data->>'*ItemCode' = ?", v.sku)
     if new_matches.any?
       new_matches.each do |new_match|
