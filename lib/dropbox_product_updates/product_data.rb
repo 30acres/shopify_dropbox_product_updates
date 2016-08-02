@@ -78,8 +78,8 @@ class ProductData
       shopify_variants = shopify_variants.flatten
       if shopify_variants.any?
         ## if SKU matches
-        binding.pry
-        matches = shopify_variants.collect { |sv| sv.sku == code }
+        # binding.pry
+        matches = shopify_variants.select { |sv| sv.sku == code }
         if matches.any?
           v = matches.first
           ProductData.update_product_descriptions(v, data)
