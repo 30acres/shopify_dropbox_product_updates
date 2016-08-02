@@ -68,6 +68,7 @@ class ProductData
   end
 
   def self.process_products
+    ## first update all then do new
     DropboxProductUpdates::Product.all_products_array.each do |page|
       page.each do |shopify_product|
         shopify_product.variants.each do |v|
@@ -76,12 +77,22 @@ class ProductData
             sleep(1)
             match = matches.first
             ProductData.update_product_descriptions(v, match)
+            match.delete
           else
             ProductData.update_product_descriptions(v, match, 'new')
           end
         end
       end
     end
+    ### any with no match - create
+    new_matches = RawDatum.where(status: 9) ##.where("data->>'*ItemCode' = ?", v.sku)
+    if new_matches.any?
+      new_matches.each do |new_match|
+        match = new_match
+        ProductData.update_product_descriptions(match.data['*ItemCode'], match, 'new')
+      end
+    end
+
   end
 
   def self.update_product_descriptions(variant, match, update_type=nil)
