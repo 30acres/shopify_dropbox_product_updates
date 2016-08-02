@@ -13,7 +13,7 @@ module ImportProductData
 
       ## get the csv
       ProductData.new(path,token).get_csv
-      
+
       ## parse the rows
       ## update the descriptions
       ProductData.process_products
@@ -71,13 +71,19 @@ class ProductData
 
     RawDatum.where(status: 9).each do |data|
       code = data.data["*ItemCode"]
-      shopify_variants = ShopifyAPI::Variant.find(:all, params: { sku: code } )
-
+      variants = []
+      [1,2,3].each do |page|
+        shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku', page: page } )
+      end
       if shopify_variants.any?
+        ## if SKU match
+        binding.pry
         v = shopify_variants.first
-        ProductData.update_product_descriptions(v, data)
-      else
-        ProductData.update_product_descriptions(v, data)
+        if match
+          ProductData.update_product_descriptions(v, data)
+        else
+          ProductData.update_product_descriptions(v, data)
+        end
       end
     end
 
@@ -229,8 +235,6 @@ class ProductData
     product.save!
     # v.save!
     puts '====================================='
-
-    puts product.inspect
 
     # if variant.nil? 
     #   updates << "Product Data: New Product: #{product.title}"
