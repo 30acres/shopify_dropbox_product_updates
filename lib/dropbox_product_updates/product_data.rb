@@ -9,7 +9,7 @@ module ImportProductData
   def self.update_all_products(path, token)
     if path and token
       ## Clear the Decks
-      ProductData.delete_datum
+      clear_the_decks
 
       ## get the csv
       ProductData.new(path,token).get_csv
@@ -19,9 +19,19 @@ module ImportProductData
       ProductData.process_products
 
       ## Clear the decks again
-      ProductData.delete_datum
+      clean_up
 
     end
+
+    def self.clear_the_decks
+      ProductData.delete_datum
+    end
+
+    def self.clean_up
+      ProductData.delete_datum
+    end
+
+
   end
 end
 
@@ -41,7 +51,6 @@ class ProductData
       encoded_more = encoded.to_json
       puts encoded_more
       RawDatum.create(data: encoded_more, client_id: 0, status: 9)
-      # puts product
     end
   end
 
@@ -77,8 +86,6 @@ class ProductData
       end
       shopify_variants = shopify_variants.flatten
       if shopify_variants.any?
-        ## if SKU matches
-        # binding.pry
         matches = shopify_variants.select { |sv| sv.sku == code }
         if matches.any?
           v = matches.first
@@ -90,31 +97,6 @@ class ProductData
       end
     end
 
-    ## first update all then do new perhaps?
-    # DropboxProductUpdates::Product.all_products_array.each do |page|
-    #   page.each do |shopify_product|
-    #     shopify_product.variants.each do |v|
-    #       matches = RawDatum.where(status: 9).where("data->>'*ItemCode' = ?", v.sku)
-    #       if matches.any?
-    #         sleep(1)
-    #         match = matches.first
-    #         ProductData.update_product_descriptions(v, match)
-    #         match.delete
-    #       else
-    #         ProductData.update_product_descriptions(v, match, 'new')
-    #       end
-    #     end
-    #   end
-    # end
-    # ### any with no match - create 
-    # new_matches = RawDatum.where(status: 9) ##.where("data->>'*ItemCode' = ?", v.sku)
-    # if new_matches.any?
-    #   new_matches.each do |new_match|
-    #     match = new_match
-    #     ProductData.update_product_descriptions(match.data['*ItemCode'], match, 'new')
-    #   end
-    # end
-    #
   end
 
   def self.update_product_descriptions(variant, match)
