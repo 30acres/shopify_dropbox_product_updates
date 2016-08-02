@@ -70,9 +70,8 @@ class ProductData
       username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
 
     RawDatum.where(status: 9).each do |data|
-      binding.pry
       code = data.data["*ItemCode"]
-      shopify_variants = ShopifyAPI::Variant.find(:all, params: { sku: code } ).any?
+      shopify_variants = ShopifyAPI::Variant.find(:all, params: { sku: code } )
 
       if shopify_variants.any?
         v = shopify_variants.first
