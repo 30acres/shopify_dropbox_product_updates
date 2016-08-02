@@ -185,8 +185,10 @@ class ProductData
     puts '====================================='
     puts '====================================='
     puts product
+    product.save!
     puts '=== P R O D U C T S A V E D ============================='
     
+
     vars = product.variants
       
     if vars.any? and product.variants.any?
