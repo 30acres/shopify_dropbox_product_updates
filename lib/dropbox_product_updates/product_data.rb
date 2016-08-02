@@ -7,6 +7,10 @@ require 'slack-notifier'
 module ImportProductData
 
   def self.update_all_products(path, token)
+     @notifier = Slack::Notifier.new ENV['SLACK_IMAGE_WEBHOOK'], channel: '#product_data_feed',
+      username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
+
+    @notifier.ping "[Product Data] Started Import"
     if path and token
       ## Clear the Decks
       ProductData.delete_datum
@@ -20,6 +24,7 @@ module ImportProductData
 
       ## Clear the decks again
       ProductData.delete_datum
+      @notifier.ping "[Product Data] Finished Import"
     end
 
   end
@@ -79,9 +84,11 @@ class ProductData
         matches = shopify_variants.select { |sv| sv.sku == code }
         if matches.any?
           v = matches.first
+          sleep(1)
           ProductData.update_product_descriptions(v, data)
         else
           v = nil
+          sleep(1)
           ProductData.update_product_descriptions(v, data)
         end
       end
@@ -90,7 +97,7 @@ class ProductData
   end
 
   def self.update_product_descriptions(variant, match)
-    sleep(2)
+    sleep(5)
     if variant.nil?
       puts 'NO MATCH'
       product = ShopifyAPI::Product.new
