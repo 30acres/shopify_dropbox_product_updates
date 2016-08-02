@@ -89,7 +89,7 @@ class ProductData
       product.metafields_global_title_tag = product.title
       product.metafields_global_description_tag = desc
 
-    tags = %w{  
+    tags = %w{
     Category
     Sub-category 1
     Sub-category 2
