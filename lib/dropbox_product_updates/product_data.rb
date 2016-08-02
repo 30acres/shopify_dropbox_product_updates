@@ -21,12 +21,6 @@ module ImportProductData
       ## Clear the decks again
       ProductData.delete_datum
 
-      # DropboxProductUpdates::Product.all_products_array.each do |page|
-      #   page.each do |product|
-      #     binding.pry
-      #     ProductData.new(product,data,token).update_descriptions
-      #   end
-      # end
     end
   end
 end
@@ -76,6 +70,7 @@ class ProductData
       username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
 
     RawDatum.where(status: 9).each do |data|
+      binding.pry
       code = data.data["*ItemCode"]
       shopify_variants = ShopifyAPI::Variant(:all, params: { sku: code } ).any?
 
@@ -191,8 +186,6 @@ class ProductData
       ShopifyAPI::Option.new(name: 'Material')
     ]
 
-    # binding.pry
-
     puts "#{product.title} :: UPDATED!!!"
     if match.data["Publish on Website"] == 'Yes'
       product.published_at = Time.now
@@ -212,7 +205,6 @@ class ProductData
     else
       v = ShopifyAPI::Variant.new
     end
-    # v = ShopifyAPI::Variant.new
     v.product_id = product.id
     v.price = match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f
     v.sku = match.data["*ItemCode"]
@@ -239,19 +231,14 @@ class ProductData
     # v.save!
     puts '====================================='
 
-    # puts product_variants.inspect
-    # product.variants = product_variants
-    # binding.pry
-
     puts product.inspect
 
-    if variant.nil? 
-      @notifier.ping "Product Data: New Product: #{product.title}"
-    else
-      @notifier.ping "Product Data: Updated Product #{product.title}"
-    end
+    # if variant.nil? 
+    #   updates << "Product Data: New Product: #{product.title}"
+    # else
+    #   updates << "Product Data: Updated Product #{product.title}"
+    # end
 
-    # product.save!
     puts '=== V A R I A N T S A V E D ============================='
     puts '====================================='
 
