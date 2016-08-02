@@ -71,17 +71,19 @@ class ProductData
 
     RawDatum.where(status: 9).each do |data|
       code = data.data["*ItemCode"]
-      variants = []
+      shopify_variants = []
       [1,2,3].each do |page|
         shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku', page: page } )
       end
       if shopify_variants.any?
-        ## if SKU match
+        ## if SKU matches
         binding.pry
-        v = shopify_variants.first
-        if match
+        matches = shopify_variants.collect { |sv| sv.sku == code }
+        if matches.any?
+          v = matches.first
           ProductData.update_product_descriptions(v, data)
         else
+          v = nil
           ProductData.update_product_descriptions(v, data)
         end
       end
