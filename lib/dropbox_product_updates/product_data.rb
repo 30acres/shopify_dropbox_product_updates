@@ -86,8 +86,10 @@ class ProductData
 
   def self.update_product_descriptions(variant, match)
     if variant = nil
+      puts 'NO MATCH'
       product = ShopifyAPI::Product.new
     else
+      puts 'MATCH'
       product = ShopifyAPI::Product.find(variant.product_id)
     end
 
