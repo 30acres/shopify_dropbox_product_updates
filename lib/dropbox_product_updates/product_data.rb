@@ -2,6 +2,8 @@ require 'net/http'
 require 'dropbox_sdk'
 require "product/product"
 require 'csv'
+require 'slack-notifier'
+
 
 module ImportProductData
   def self.update_all_products(path, token)
@@ -29,6 +31,9 @@ class ProductData
   def initialize(path,token)
     @path = path
     @token = token
+    @notifier = Slack::Notifier.new ENV['SLACK_IMAGE_WEBHOOK'], channel: '#product_data_feed',
+      username: 'Image Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
+
   end
 
   def get_csv
@@ -208,6 +213,12 @@ class ProductData
     # binding.pry
 
     puts product.inspect
+
+    if variant.nil? 
+      @notifier.ping "Product Data: New Product: #{product.title}"
+    else
+      @notifier.ping "Product Data: Updated Product #{product.title}"
+    end
 
     # product.save!
     puts '=== V A R I A N T S A V E D ============================='
