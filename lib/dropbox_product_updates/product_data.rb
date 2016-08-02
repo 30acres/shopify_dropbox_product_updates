@@ -71,6 +71,8 @@ class ProductData
             sleep(1)
             match = matches.first
             ProductData.update_product_descriptions(v, match)
+          else
+            ProductData.update_product_descriptions(nil, match)
           end
         end
       end
@@ -78,12 +80,11 @@ class ProductData
   end
 
   def self.update_product_descriptions(variant, match)
-    product = ShopifyAPI::Product.find(variant.product_id)
-
-    unless product
+    if variant = nil
       product = ShopifyAPI::Product.new
+    else
+      product = ShopifyAPI::Product.find(variant.product_id)
     end
-
 
       desc = match.data["Product Description"]
       product.body_html = desc
@@ -168,7 +169,13 @@ class ProductData
     puts product
     puts '=== P R O D U C T S A V E D ============================='
     
-    v = product.variants.first
+    vars = product.variants
+      
+    if vars.any?
+      v = product.variants.first
+    else
+      v = ShopifyAPI::Variant.new
+    end
      # v = ShopifyAPI::Variant.new
     v.product_id = product.id
       v.price = match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f
