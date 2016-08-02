@@ -185,7 +185,6 @@ class ProductData
     puts '====================================='
     puts '====================================='
     puts product
-    product.save!
     puts '=== P R O D U C T S A V E D ============================='
     
 
