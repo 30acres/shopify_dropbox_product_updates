@@ -8,13 +8,17 @@ require 'slack-notifier'
 module ImportProductData
   def self.update_all_products(path, token)
     if path and token
+      ## Clear the Decks
+      ProductData.delete_datum
+
       ## get the csv
       ProductData.new(path,token).get_csv
+      
       ## parse the rows
       ## update the descriptions
-
       ProductData.process_products
 
+      ## Clear the decks again
       ProductData.delete_datum
 
       # DropboxProductUpdates::Product.all_products_array.each do |page|
