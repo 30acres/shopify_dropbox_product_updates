@@ -68,7 +68,7 @@ class ProductData
   end
 
   def self.process_products
-    ## first update all then do new
+    ## first update all then do new perhaps?
     DropboxProductUpdates::Product.all_products_array.each do |page|
       page.each do |shopify_product|
         shopify_product.variants.each do |v|
