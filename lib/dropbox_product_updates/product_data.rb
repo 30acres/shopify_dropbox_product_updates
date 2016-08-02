@@ -189,7 +189,7 @@ class ProductData
     
     vars = product.variants
       
-    if vars.any?
+    if vars.any? and product.variants.any?
       v = product.variants.first
     else
       v = ShopifyAPI::Variant.new
