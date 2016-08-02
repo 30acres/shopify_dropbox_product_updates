@@ -16,7 +16,7 @@ module ImportProductData
       ProductData.process_products
 
       ProductData.delete_datum
-     
+
       # DropboxProductUpdates::Product.all_products_array.each do |page|
       #   page.each do |product|
       #     binding.pry
@@ -68,34 +68,46 @@ class ProductData
   end
 
   def self.process_products
-      @notifier = Slack::Notifier.new ENV['SLACK_IMAGE_WEBHOOK'], channel: '#product_data_feed',
+    @notifier = Slack::Notifier.new ENV['SLACK_IMAGE_WEBHOOK'], channel: '#product_data_feed',
       username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
 
-    ## first update all then do new perhaps?
-    DropboxProductUpdates::Product.all_products_array.each do |page|
-      page.each do |shopify_product|
-        shopify_product.variants.each do |v|
-          matches = RawDatum.where(status: 9).where("data->>'*ItemCode' = ?", v.sku)
-          if matches.any?
-            sleep(1)
-            match = matches.first
-            ProductData.update_product_descriptions(v, match)
-            match.delete
-          else
-            ProductData.update_product_descriptions(v, match, 'new')
-          end
-        end
-      end
-    end
-    ### any with no match - create 
-    new_matches = RawDatum.where(status: 9) ##.where("data->>'*ItemCode' = ?", v.sku)
-    if new_matches.any?
-      new_matches.each do |new_match|
-        match = new_match
-        ProductData.update_product_descriptions(match.data['*ItemCode'], match, 'new')
+    RawDatum.where(status: 9).each do |data|
+      code = data.data["*ItemCode"]
+      shopify_variants = ShopifyAPI::Variant(:all, params: { sku: code } ).any?
+
+      if shopify_variants.any?
+        first_match = shopify_variants.first
+        ProductData.update_product_descriptions(v, data)
+      else
+        ProductData.update_product_descriptions(v, data, 'new')
       end
     end
 
+    ## first update all then do new perhaps?
+    # DropboxProductUpdates::Product.all_products_array.each do |page|
+    #   page.each do |shopify_product|
+    #     shopify_product.variants.each do |v|
+    #       matches = RawDatum.where(status: 9).where("data->>'*ItemCode' = ?", v.sku)
+    #       if matches.any?
+    #         sleep(1)
+    #         match = matches.first
+    #         ProductData.update_product_descriptions(v, match)
+    #         match.delete
+    #       else
+    #         ProductData.update_product_descriptions(v, match, 'new')
+    #       end
+    #     end
+    #   end
+    # end
+    # ### any with no match - create 
+    # new_matches = RawDatum.where(status: 9) ##.where("data->>'*ItemCode' = ?", v.sku)
+    # if new_matches.any?
+    #   new_matches.each do |new_match|
+    #     match = new_match
+    #     ProductData.update_product_descriptions(match.data['*ItemCode'], match, 'new')
+    #   end
+    # end
+    #
   end
 
   def self.update_product_descriptions(variant, match, update_type=nil)
@@ -107,14 +119,14 @@ class ProductData
       product = ShopifyAPI::Product.find(variant.product_id)
     end
 
-      desc = match.data["Product Description"]
-      product.body_html = desc
-      product.product_type = match.data['Sub-category 1']
-      product.vendor = match.data["Designer"]
-      product.title = match.data["Product Title"].gsub('  ',' ').split.map(&:capitalize).join(' ')
-      
-      product.metafields_global_title_tag = product.title
-      product.metafields_global_description_tag = desc
+    desc = match.data["Product Description"]
+    product.body_html = desc
+    product.product_type = match.data['Sub-category 1']
+    product.vendor = match.data["Designer"]
+    product.title = match.data["Product Title"].gsub('  ',' ').split.map(&:capitalize).join(' ')
+
+    product.metafields_global_title_tag = product.title
+    product.metafields_global_description_tag = desc
 
     tags = %w{
     Category
@@ -174,9 +186,9 @@ class ProductData
       ShopifyAPI::Option.new(name: 'Colour'),
       ShopifyAPI::Option.new(name: 'Material')
     ]
-     
+
     # binding.pry
-    
+
     puts "#{product.title} :: UPDATED!!!"
     if match.data["Publish on Website"] == 'Yes'
       product.published_at = Time.now
@@ -189,33 +201,33 @@ class ProductData
     puts '====================================='
     puts product
     puts '=== P R O D U C T S A V E D ============================='
-    
+
     # binding.pry
     if product.id
       v = ShopifyAPI::Variant.variants.first
     else
       v = ShopifyAPI::Variant.new
     end
-     # v = ShopifyAPI::Variant.new
+    # v = ShopifyAPI::Variant.new
     v.product_id = product.id
-      v.price = match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f
-      v.sku = match.data["*ItemCode"]
-      v.grams = match.data["Weight (grams)"].to_i
-      v.compare_at_price = match.data["Price (before Sale)"]
-      v.option1 = [match.data["Source Country Size"],match.data["Source Country Size"]].join('/')
-      v.option2 = match.data["Colour"].to_s.blank? ? 'N/A' : match.data["Colour"].to_s
-       v.option3 = match.data["Material"].to_s.blank? ? 'N/A' : match.data["Material"]
-        v.inventory_quantity = match.data["NumStockAvailable"]
-        v.old_inventory_quantity = match.data["NumStockAvailable"]
-        v.requires_shipping = true
-        v.barcode = nil
-        v.taxable = true
-        v.position = 1
-        v.inventory_policy = 'deny'
-        v.fulfillment_service = "manual"
-        v.inventory_management = "shopify"
-        # weight: match.data["Weight (grams)"].to_i/100,
-        v.weight_unit = "g"
+    v.price = match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f
+    v.sku = match.data["*ItemCode"]
+    v.grams = match.data["Weight (grams)"].to_i
+    v.compare_at_price = match.data["Price (before Sale)"]
+    v.option1 = [match.data["Source Country Size"],match.data["Source Country Size"]].join('/')
+    v.option2 = match.data["Colour"].to_s.blank? ? 'N/A' : match.data["Colour"].to_s
+    v.option3 = match.data["Material"].to_s.blank? ? 'N/A' : match.data["Material"]
+    v.inventory_quantity = match.data["NumStockAvailable"]
+    v.old_inventory_quantity = match.data["NumStockAvailable"]
+    v.requires_shipping = true
+    v.barcode = nil
+    v.taxable = true
+    v.position = 1
+    v.inventory_policy = 'deny'
+    v.fulfillment_service = "manual"
+    v.inventory_management = "shopify"
+    # weight: match.data["Weight (grams)"].to_i/100,
+    v.weight_unit = "g"
     puts v.inspect
     # binding.pry
     product.variants = [v]
