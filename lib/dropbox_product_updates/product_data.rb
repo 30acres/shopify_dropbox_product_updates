@@ -6,10 +6,11 @@ require 'slack-notifier'
 
 
 module ImportProductData
+
   def self.update_all_products(path, token)
     if path and token
       ## Clear the Decks
-      clear_the_decks
+      ProductData.delete_datum
 
       ## get the csv
       ProductData.new(path,token).get_csv
@@ -19,18 +20,8 @@ module ImportProductData
       ProductData.process_products
 
       ## Clear the decks again
-      clean_up
-
-    end
-
-    def self.clear_the_decks
       ProductData.delete_datum
     end
-
-    def self.clean_up
-      ProductData.delete_datum
-    end
-
 
   end
 end
@@ -178,7 +169,7 @@ class ProductData
 
     puts "#{product.title} :: UPDATED!!!"
     if match.data["Publish on Website"] == 'Yes'
-      product.published_at = Time.now
+      product.published_at = DateTime.now - 10.hours
     else
       product.published_at = nil
     end
