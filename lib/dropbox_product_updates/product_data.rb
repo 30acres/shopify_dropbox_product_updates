@@ -80,6 +80,11 @@ class ProductData
   def self.update_product_descriptions(variant, match)
     product = ShopifyAPI::Product.find(variant.product_id)
 
+    unless product
+      product = ShopifyAPI::Product.new
+    end
+
+
       desc = match.data["Product Description"]
       product.body_html = desc
       product.product_type = match.data['Sub-category 1']
