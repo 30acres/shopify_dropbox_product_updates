@@ -77,15 +77,15 @@ class ProductData
             match = matches.first
             ProductData.update_product_descriptions(v, match)
           else
-            ProductData.update_product_descriptions(nil, match)
+            ProductData.update_product_descriptions(v, match, 'new')
           end
         end
       end
     end
   end
 
-  def self.update_product_descriptions(variant, match)
-    if variant = nil
+  def self.update_product_descriptions(variant, match, update_type=nil)
+    if update == 'new'
       puts 'NO MATCH'
       product = ShopifyAPI::Product.new
     else
