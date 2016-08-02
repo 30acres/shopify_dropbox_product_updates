@@ -41,9 +41,9 @@ class ProductData
       # encoded = CSV.parse(product).to_hash.to_json
       encoded = product.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
       encoded_more = encoded.to_json
-      puts encoded
+      puts encoded_more
       RawDatum.create(data: encoded_more, client_id: 0, status: 9)
-      puts product
+      # puts product
     end
   end
 
@@ -96,7 +96,7 @@ class ProductData
   end
 
   def self.update_product_descriptions(variant, match, update_type=nil)
-    if update == 'new'
+    if update_type == 'new'
       puts 'NO MATCH'
       product = ShopifyAPI::Product.new
     else
