@@ -108,7 +108,7 @@ class ProductData
       product.body_html = desc
       product.product_type = match.data['Sub-category 1']
       product.vendor = match.data["Designer"]
-      product.title = product.title.gsub('  ',' ').split.map(&:capitalize).join(' ')
+      product.title = match.data["Title"].gsub('  ',' ').split.map(&:capitalize).join(' ')
       
       product.metafields_global_title_tag = product.title
       product.metafields_global_description_tag = desc
