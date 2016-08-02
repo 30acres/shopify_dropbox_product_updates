@@ -72,13 +72,13 @@ class ProductData
     RawDatum.where(status: 9).each do |data|
       binding.pry
       code = data.data["*ItemCode"]
-      shopify_variants = ShopifyAPI::Variant(:all, params: { sku: code } ).any?
+      shopify_variants = ShopifyAPI::Variant.find(:all, params: { sku: code } ).any?
 
       if shopify_variants.any?
-        first_match = shopify_variants.first
+        v = shopify_variants.first
         ProductData.update_product_descriptions(v, data)
       else
-        ProductData.update_product_descriptions(v, data, 'new')
+        ProductData.update_product_descriptions(v, data)
       end
     end
 
@@ -109,8 +109,8 @@ class ProductData
     #
   end
 
-  def self.update_product_descriptions(variant, match, update_type=nil)
-    if update_type == 'new'
+  def self.update_product_descriptions(variant, match)
+    if variant.nil?
       puts 'NO MATCH'
       product = ShopifyAPI::Product.new
     else
