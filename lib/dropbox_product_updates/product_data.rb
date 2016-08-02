@@ -187,10 +187,7 @@ class ProductData
     puts product
     puts '=== P R O D U C T S A V E D ============================='
     
-
-    vars = product.variants
-      
-    if vars.any? and product.variants.any?
+    if product.variants
       v = product.variants.first
     else
       v = ShopifyAPI::Variant.new
