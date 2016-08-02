@@ -4,7 +4,6 @@ require "product/product"
 require 'csv'
 require 'slack-notifier'
 
-
 module ImportProductData
 
   def self.update_all_products(path, token)
@@ -91,6 +90,7 @@ class ProductData
   end
 
   def self.update_product_descriptions(variant, match)
+    sleep(2)
     if variant.nil?
       puts 'NO MATCH'
       product = ShopifyAPI::Product.new
