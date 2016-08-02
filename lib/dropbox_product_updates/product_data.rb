@@ -187,9 +187,9 @@ class ProductData
     puts product
     puts '=== P R O D U C T S A V E D ============================='
     
-    binding.pry
-    if product.variants
-      v = product.variants.first
+    # binding.pry
+    if product.id
+      v = ShopifyAPI::Variant.variants.first
     else
       v = ShopifyAPI::Variant.new
     end
