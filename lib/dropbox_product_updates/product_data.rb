@@ -235,6 +235,7 @@ class ProductData
     puts v.inspect
     # binding.pry
     product.variants = [v]
+    sleep(1)
     product.save!
     # v.save!
     puts '====================================='
