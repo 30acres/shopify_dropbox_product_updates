@@ -200,7 +200,7 @@ class ProductData
 
     # binding.pry
     if product.id
-      v = ShopifyAPI::Variant.variants.first
+      v = product.variants.first
     else
       v = ShopifyAPI::Variant.new
     end
