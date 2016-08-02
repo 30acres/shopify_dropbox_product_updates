@@ -147,7 +147,7 @@ class ProductData
       ShopifyAPI::Option.new(name: 'Colour'),
       ShopifyAPI::Option.new(name: 'Material')
     ]
-    
+     
     # binding.pry
     
     puts "#{product.title} :: UPDATED!!!"
