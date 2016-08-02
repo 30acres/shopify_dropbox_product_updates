@@ -32,7 +32,7 @@ class ProductData
     @path = path
     @token = token
     @notifier = Slack::Notifier.new ENV['SLACK_IMAGE_WEBHOOK'], channel: '#product_data_feed',
-      username: 'Image Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
+      username: 'Import Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
 
   end
 
@@ -68,6 +68,9 @@ class ProductData
   end
 
   def self.process_products
+      @notifier = Slack::Notifier.new ENV['SLACK_IMAGE_WEBHOOK'], channel: '#product_data_feed',
+      username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
+
     ## first update all then do new perhaps?
     DropboxProductUpdates::Product.all_products_array.each do |page|
       page.each do |shopify_product|
