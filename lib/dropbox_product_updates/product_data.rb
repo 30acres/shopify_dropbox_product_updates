@@ -75,6 +75,7 @@ class ProductData
       [1,2,3].each do |page|
         shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku', page: page } )
       end
+      shopify_variants = shopify_variants.flatten
       if shopify_variants.any?
         ## if SKU matches
         binding.pry
