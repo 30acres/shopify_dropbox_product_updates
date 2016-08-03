@@ -200,7 +200,9 @@ class ProductData
 
     puts "#{product.title} :: UPDATED!!!"
     if match.data["Publish on Website"] == 'Yes'
-      product.published_at = DateTime.now - 10.hours
+      unless product.id
+        product.published_at = DateTime.now - 10.hours
+      end
     else
       product.published_at = nil
     end
