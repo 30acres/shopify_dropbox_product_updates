@@ -123,7 +123,7 @@ class ProductData
 
     desc = match.data["Product Description"]
     product.body_html = desc
-    product.product_type = match.data['Sub-category 1']
+    product.product_type = match.data['Category']
     product.vendor = match.data["Designer"]
     product.title = match.data["Product Title"].gsub('  ',' ').split.map(&:capitalize).join(' ')
 
@@ -181,7 +181,7 @@ class ProductData
     }
 
       
-    product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}" : nil  }.join(',')
+    product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.gsub('-',' ').humanize.titleize}: #{match.data[tag].gsub(',','')}" : nil  }.join(',')
     product.tags = product.tags
 
     size = ShopifyAPI::Option.new(name: 'Size').to_s
