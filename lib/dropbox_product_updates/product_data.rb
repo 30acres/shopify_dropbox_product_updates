@@ -249,7 +249,6 @@ class ProductData
     # binding.pry
     product.variants = [v]
     sleep(1)
-    binding.pry
     product.save!
     # v.save!
     puts '====================================='
