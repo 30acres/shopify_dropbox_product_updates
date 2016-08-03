@@ -184,10 +184,18 @@ class ProductData
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}" : nil  }.join(',')
     product.tags = product.tags + ', ImportChecked, ' + oldtags
 
+    size = ShopifyAPI::Option.new(name: 'Size').to_s
+    color = ShopifyAPI::Option.new(name: 'Colour').to_s
+    material = ShopifyAPI::Option.new(name: 'Material').to_s
+
+    option1 = size.downcase.include?('n/a') or size.nil? or size.blank? ? nil : size
+    option2 = color.downcase.include?('n/a') or color.nil? or color.blank? ? nil : color
+    option3 = material.downcase.include?('n/a') or material.nil? or material.blank? ? nil : material
+
     product.options = [
-      ShopifyAPI::Option.new(name: 'Size'), 
-      ShopifyAPI::Option.new(name: 'Colour'),
-      ShopifyAPI::Option.new(name: 'Material')
+      option1,
+      option2,
+      option3
     ]
 
     puts "#{product.title} :: UPDATED!!!"
@@ -214,9 +222,19 @@ class ProductData
     v.sku = match.data["*ItemCode"]
     v.grams = match.data["Weight (grams)"].to_i
     v.compare_at_price = match.data["Price (before Sale)"]
-    v.option1 = [match.data["Source Country Size"],match.data["Source Country Size"]].join('/')
-    v.option2 = match.data["Colour"].to_s.blank? ? 'N/A' : match.data["Colour"].to_s
-    v.option3 = match.data["Material"].to_s.blank? ? 'N/A' : match.data["Material"]
+
+    if !(size.downcase.include?('n/a') or size.nil? or size.blank?)
+      v.option1 = size
+    end
+    
+    if !(color.downcase.include?('n/a') or color.nil? or color.blank?)
+      v.option2 = color
+    end
+  
+    if !(material.downcase.include?('n/a') or material.nil? or material.blank?)
+      v.option3 = material
+    end
+    
     v.inventory_quantity = match.data["NumStockAvailable"]
     v.old_inventory_quantity = match.data["NumStockAvailable"]
     v.requires_shipping = true
