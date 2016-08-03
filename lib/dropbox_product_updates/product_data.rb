@@ -185,7 +185,7 @@ class ProductData
     product.tags = product.tags
 
     product_options = [] 
-    ['Size','Color','Material'].each_with_index do |opt,index|
+    ['Australian Size','Colour','Material'].each_with_index do |opt,index|
       binding.pry
       if !(match.data[opt].downcase.include?('n/a') or match.data[opt].nil? or match.data[opt].blank?)
         if index == 0
@@ -197,7 +197,7 @@ class ProductData
         if index == 2
           v.option3 = match.data[opt]
         end
-        product_options << ShopifyAPI::Option.new(name: match.data[opt])
+        product_options << ShopifyAPI::Option.new(name: opt)
       end
     end
 
