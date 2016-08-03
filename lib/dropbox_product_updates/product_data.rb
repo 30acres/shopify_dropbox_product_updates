@@ -77,6 +77,7 @@ class ProductData
       code = data.data["*ItemCode"]
       shopify_variants = []
       [1,2,3].each do |page|
+        puts 'page'
         shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku', page: page } )
       end
       shopify_variants = shopify_variants.flatten
@@ -84,10 +85,12 @@ class ProductData
         matches = shopify_variants.select { |sv| sv.sku == code }
         if matches.any?
           v = matches.first
+          puts '88'
           sleep(1)
           ProductData.update_product_descriptions(v, data)
         else
           v = nil
+          puts '93'
           sleep(1)
           ProductData.update_product_descriptions(v, data)
         end
