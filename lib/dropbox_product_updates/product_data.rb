@@ -200,7 +200,7 @@ class ProductData
         product_options << ShopifyAPI::Option.new(name: opt)
       end
     end
-
+    binding.pry
     product.options = product_options
 
     puts "#{product.title} :: UPDATED!!!"
