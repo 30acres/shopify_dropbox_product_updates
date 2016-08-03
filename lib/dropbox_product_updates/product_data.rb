@@ -84,6 +84,7 @@ class ProductData
       if shopify_variants.any?
         matches = shopify_variants.select { |sv| sv.sku == code }
         if matches.any?
+          binding.pry
           v = matches.first
           puts '88'
           sleep(1)
