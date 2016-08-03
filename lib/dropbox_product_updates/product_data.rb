@@ -88,19 +88,13 @@ class ProductData
         if matches.any?
           # binding.pry
           v = matches.first
-          puts '88'
-          sleep(1)
           ProductData.update_product_descriptions(v, data)
         else
           v = nil
-          puts '93'
-          sleep(1)
           ProductData.update_product_descriptions(v, data)
         end
       else
         v = nil
-        puts '93'
-        sleep(1)
         ProductData.update_product_descriptions(v, data)
       end
     end
@@ -108,7 +102,7 @@ class ProductData
   end
 
   def self.update_product_descriptions(variant, match)
-    sleep(5)
+    sleep(1)
     oldtags = ''
 
 
@@ -251,7 +245,6 @@ class ProductData
     puts v.inspect
     # binding.pry
     product.variants = [v]
-    sleep(1)
     product.save!
     # v.save!
     puts '====================================='
