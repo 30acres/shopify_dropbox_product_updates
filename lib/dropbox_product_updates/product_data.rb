@@ -219,15 +219,15 @@ class ProductData
       # binding.pry
         if index == 0
           d = match.data[opt].to_s.strip
-          v.option1 = d.blank? ? nil : d
+          v.option1 = d.blank? ? 'n/a' : d
         end
         if index == 1
           d = match.data[opt].to_s.strip
-          v.option2 = d.blank? ? nil : d
+          v.option2 = d.blank? ? 'n/a' : d
         end
         if index == 2
           d = match.data[opt].to_s.strip
-          v.option3 = d.blank? ? nil : d
+          v.option3 = d.blank? ? 'n/a' : d
         end
     end
 
