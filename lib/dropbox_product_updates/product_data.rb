@@ -72,18 +72,21 @@ class ProductData
   def self.process_products
     @notifier = Slack::Notifier.new ENV['SLACK_IMAGE_WEBHOOK'], channel: '#product_data_feed',
       username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
+    
     shopify_variants = []
     [1,2,3].each do |page|
       shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku', page: page } )
     end
+    shopify_variants = shopify_variants.flatten
+    binding.pry
 
     RawDatum.where(status: 9).each do |data|
       code = data.data["*ItemCode"]
-      shopify_variants = shopify_variants.flatten
       if shopify_variants.any?
         matches = shopify_variants.select { |sv| sv.sku == code }
+        binding.pry
         if matches.any?
-          binding.pry
+          # binding.pry
           v = matches.first
           puts '88'
           sleep(1)
@@ -106,6 +109,7 @@ class ProductData
       product = ShopifyAPI::Product.new
     else
       puts 'MATCH'
+      binding.pry
       product = ShopifyAPI::Product.find(variant.product_id)
     end
 
