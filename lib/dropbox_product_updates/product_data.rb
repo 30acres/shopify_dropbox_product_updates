@@ -7,7 +7,7 @@ require 'slack-notifier'
 module ImportProductData
 
   def self.update_all_products(path, token)
-     @notifier = Slack::Notifier.new ENV['SLACK_IMAGE_WEBHOOK'], channel: '#product_data_feed',
+    @notifier = Slack::Notifier.new ENV['SLACK_IMAGE_WEBHOOK'], channel: '#product_data_feed',
       username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
 
     @notifier.ping "[Product Data] Started Import"
@@ -72,7 +72,7 @@ class ProductData
   def self.process_products
     @notifier = Slack::Notifier.new ENV['SLACK_IMAGE_WEBHOOK'], channel: '#product_data_feed',
       username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
-    
+
     shopify_variants = []
     [1,2,3].each do |page|
       shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku', page: page } )
@@ -97,12 +97,11 @@ class ProductData
           sleep(1)
           ProductData.update_product_descriptions(v, data)
         end
-        else
-          v = nil
-          puts '93'
-          sleep(1)
-          ProductData.update_product_descriptions(v, data)
-        end
+      else
+        v = nil
+        puts '93'
+        sleep(1)
+        ProductData.update_product_descriptions(v, data)
       end
     end
 
