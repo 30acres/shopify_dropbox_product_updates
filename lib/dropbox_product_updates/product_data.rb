@@ -184,19 +184,21 @@ class ProductData
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}" : nil  }.join(',')
     product.tags = product.tags
 
-    size = ShopifyAPI::Option.new(name: 'Size').to_s
-    color = ShopifyAPI::Option.new(name: 'Colour').to_s
-    material = ShopifyAPI::Option.new(name: 'Material').to_s
-
-    option1 = size.downcase.include?('n/a') or size.nil? or size.blank? ? nil : size
-    option2 = color.downcase.include?('n/a') or color.nil? or color.blank? ? nil : color
-    option3 = material.downcase.include?('n/a') or material.nil? or material.blank? ? nil : material
-
-    product.options = [
-      option1,
-      option2,
-      option3
-    ]
+   product_options = [] 
+    ['Size','Color','Material'].each_with_index do |opt,index|
+      if !(match.data[opt].downcase.include?('n/a') or match.data[opt].nil? or match.data[opt].blank?)
+        if index == 0
+          v.option1 = match.data[opt]
+        end
+        if index == 1
+          v.option2 = match.data[opt]
+        end
+        if index == 2
+          v.option3 = match.data[opt]
+        end
+        product_options << ShopifyAPI::Option.new(name: match.data[opt])
+      end
+    end
 
     puts "#{product.title} :: UPDATED!!!"
     if match.data["Publish on Website"] == 'Yes'
@@ -224,18 +226,6 @@ class ProductData
     v.sku = match.data["*ItemCode"]
     v.grams = match.data["Weight (grams)"].to_i
     v.compare_at_price = match.data["Price (before Sale)"]
-
-    if !(size.downcase.include?('n/a') or size.nil? or size.blank?)
-      v.option1 = size
-    end
-    
-    if !(color.downcase.include?('n/a') or color.nil? or color.blank?)
-      v.option2 = color
-    end
-  
-    if !(material.downcase.include?('n/a') or material.nil? or material.blank?)
-      v.option3 = material
-    end
     
     v.inventory_quantity = match.data["NumStockAvailable"]
     v.old_inventory_quantity = match.data["NumStockAvailable"]
