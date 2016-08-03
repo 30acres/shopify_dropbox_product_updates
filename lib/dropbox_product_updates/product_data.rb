@@ -186,6 +186,7 @@ class ProductData
 
     product_options = [] 
     ['Size','Color','Material'].each_with_index do |opt,index|
+      binding.pry
       if !(match.data[opt].downcase.include?('n/a') or match.data[opt].nil? or match.data[opt].blank?)
         if index == 0
           v.option1 = match.data[opt]
