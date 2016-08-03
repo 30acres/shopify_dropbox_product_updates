@@ -218,13 +218,16 @@ class ProductData
     ['Australian Size','Colour','Material'].each_with_index do |opt,index|
       # binding.pry
         if index == 0
-          v.option1 = match.data[opt]
+          d = match.data[opt].to_s.strip
+          v.option1 = d.blank? ? nil : d
         end
         if index == 1
-          v.option2 = match.data[opt]
+          d = match.data[opt].to_s.strip
+          v.option2 = d.blank? ? nil : d
         end
         if index == 2
-          v.option3 = match.data[opt]
+          d = match.data[opt].to_s.strip
+          v.option3 = d.blank? ? nil : d
         end
     end
 
