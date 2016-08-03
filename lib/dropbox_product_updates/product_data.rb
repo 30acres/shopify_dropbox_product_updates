@@ -181,8 +181,8 @@ class ProductData
     }
 
       
-    product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}" : nil  }.join(',')
-    product.tags = product.tags + ', ImportChecked, ' + oldtags
+    product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.gsub('-',' ').humanize.titleize}: #{match.data[tag].gsub(',','')}" : nil  }.join(',')
+    product.tags = product.tags
 
     size = ShopifyAPI::Option.new(name: 'Size').to_s
     color = ShopifyAPI::Option.new(name: 'Colour').to_s
