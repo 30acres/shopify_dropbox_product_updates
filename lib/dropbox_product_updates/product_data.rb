@@ -202,7 +202,7 @@ class ProductData
     puts '====================================='
     puts '====================================='
     puts product
-    puts '=== P R O D U C T S A V E D ============================='
+    puts '=== P R O D U C T S A V E D ==========================='
 
     # binding.pry
     if product.id
