@@ -184,7 +184,7 @@ class ProductData
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}" : nil  }.join(',')
     product.tags = product.tags
 
-   product_options = [] 
+    product_options = [] 
     ['Size','Color','Material'].each_with_index do |opt,index|
       if !(match.data[opt].downcase.include?('n/a') or match.data[opt].nil? or match.data[opt].blank?)
         if index == 0
@@ -199,6 +199,8 @@ class ProductData
         product_options << ShopifyAPI::Option.new(name: match.data[opt])
       end
     end
+
+    product.options = product_options
 
     puts "#{product.title} :: UPDATED!!!"
     if match.data["Publish on Website"] == 'Yes'
