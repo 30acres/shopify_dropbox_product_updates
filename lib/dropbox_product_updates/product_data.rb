@@ -188,19 +188,9 @@ class ProductData
     ['Australian Size','Colour','Material'].each_with_index do |opt,index|
       # binding.pry
       if !(match.data[opt].to_s.downcase.include?('n/a') or match.data[opt].nil? or match.data[opt].blank?)
-        if index == 0
-          v.option1 = match.data[opt]
-        end
-        if index == 1
-          v.option2 = match.data[opt]
-        end
-        if index == 2
-          v.option3 = match.data[opt]
-        end
         product_options << ShopifyAPI::Option.new(name: opt)
       end
     end
-    binding.pry
     product.options = product_options
 
     puts "#{product.title} :: UPDATED!!!"
@@ -224,6 +214,22 @@ class ProductData
     else
       v = ShopifyAPI::Variant.new
     end
+
+    ['Australian Size','Colour','Material'].each_with_index do |opt,index|
+      # binding.pry
+      if !(match.data[opt].to_s.downcase.include?('n/a') or match.data[opt].nil? or match.data[opt].blank?)
+        if index == 0
+          v.option1 = match.data[opt]
+        end
+        if index == 1
+          v.option2 = match.data[opt]
+        end
+        if index == 2
+          v.option3 = match.data[opt]
+        end
+      end
+    end
+
     v.product_id = product.id
     v.price = match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f
     v.sku = match.data["*ItemCode"]
