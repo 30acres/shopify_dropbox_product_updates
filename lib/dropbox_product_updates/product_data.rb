@@ -109,6 +109,9 @@ class ProductData
 
   def self.update_product_descriptions(variant, match)
     sleep(5)
+    oldtags = ''
+
+
     if variant.nil?
       puts 'NO MATCH'
       product = ShopifyAPI::Product.new
@@ -116,6 +119,7 @@ class ProductData
       puts 'MATCH'
       binding.pry
       product = ShopifyAPI::Product.find(variant.product_id)
+      oldtags = product.tags
     end
 
     desc = match.data["Product Description"]
@@ -177,8 +181,9 @@ class ProductData
     Published
     }
 
+      
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}" : nil  }.join(',')
-    product.tags = product.tags + ', ImportChecked'
+    product.tags = product.tags + ', ImportChecked, ' + oldtags
 
     product.options = [
       ShopifyAPI::Option.new(name: 'Size'), 
