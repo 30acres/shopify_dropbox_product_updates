@@ -187,9 +187,9 @@ class ProductData
     product_options = [] 
     ['Australian Size','Colour','Material'].each_with_index do |opt,index|
       # binding.pry
-      if !(match.data[opt].to_s.downcase.include?('n/a') or match.data[opt].nil? or match.data[opt].blank?)
+      # if !(match.data[opt].to_s.downcase.include?('n/a') or match.data[opt].nil? or match.data[opt].blank?)
         product_options << ShopifyAPI::Option.new(name: opt)
-      end
+      # end
     end
     product.options = product_options
 
