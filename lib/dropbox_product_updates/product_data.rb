@@ -116,7 +116,7 @@ class ProductData
       puts 'NO MATCH'
       product = ShopifyAPI::Product.new
     else
-      puts 'MATCH'
+      puts 'MATCH FOUND'
       binding.pry
       product = ShopifyAPI::Product.find(variant.product_id)
       oldtags = product.tags
