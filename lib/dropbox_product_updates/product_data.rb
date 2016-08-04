@@ -102,7 +102,7 @@ class ProductData
   end
 
   def self.update_product_descriptions(variant, match)
-    sleep(1)
+    sleep(0.5)
     oldtags = ''
 
 
