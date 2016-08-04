@@ -124,57 +124,56 @@ class ProductData
     product.metafields_global_title_tag = product.title
     product.metafields_global_description_tag = desc
 
-    tags = %w{
-    Category
-    Sub-category 1
-    Sub-category 2
-    Condition
-    Outer Condition Detail
-    Inner Condition Detail
-    Sole Condition Detail
-    Country
-    Source Country Size
-    Australian Size
-    Designer
-    Width
-    Height
-    Depth
-    Heel Height
-    Colour
-    Detailed Colour
-    Detailed Material
-    Lining Material
-    Pattern
-    Gender
-    Season
-    Has Tag
-    Has Original Box
-    Has Dustbag
-    Vintage
-    Price	
-    Price (before Sale)	
-    IsConsigned
-    NumStockAvailable
-    Publish on Website
-    Vintage
-    Partywear
-    Workwear
-    Casual Wear
-    We Love
-    Community Loves
-    On Sale
-    Recommended Retail Price
-    LocationTracking
-    IsConsigned
-    NumStockAvailable
-    IsDataValid
-    PhotoDone
-    OverwriteShopifyDescOnImport
-    Sold by
-    Published
-    }
+    tags = Array.new(
+    'Category',
+    'Sub-category 1',
+    'Sub-category 2',
+    'Condition',
+    'Outer Condition Detail',
+    'Inner Condition Detail',
+    'Sole Condition Detail',
+    'Country',
+    'Source Country Size',
+    'Australian Size',
+    'Designer',
+    'Width',
+    'Height',
+    'Depth',
+    'Heel Height',
+    'Colour',
+    'Detailed Colour',
+    'Detailed Material',
+    'Lining Material',
+    'Pattern',
+    'Gender',
+    'Season',
+    'Has Tag',
+    'Has Original Box',
+    'Has Dustbag',
+    'Vintage',
+    'Price',	
+    'Price (before Sale)',	
+    'IsConsigned',
+    'NumStockAvailable',
+    'Publish on Website',
+    'Vintage',
+    'Partywear',
+    'Workwear',
+    'Casual Wear',
+    'We Love',
+    'Community Loves',
+    'On Sale',
+    'Recommended Retail Price',
+    'LocationTracking',
+    'IsConsigned',
+    'NumStockAvailable',
+    'IsDataValid',
+    'PhotoDone',
+    'OverwriteShopifyDescOnImport',
+    'Sold by',
+    'Published'
+    )
 
-    binding.pry 
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}" : nil  }.join(',')
     product.tags = product.tags
 
