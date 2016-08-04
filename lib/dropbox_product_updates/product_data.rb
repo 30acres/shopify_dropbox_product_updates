@@ -103,7 +103,7 @@ class ProductData
 
   def self.update_product_descriptions(variant, match)
     puts '==== C R E D I T ===='
-    puts ShopifyAPI::Limit.credit_used
+    puts ShopifyAPI.credit_used
     puts '---=============-----'
     sleep(1)
     oldtags = ''
