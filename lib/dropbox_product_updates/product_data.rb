@@ -102,7 +102,7 @@ class ProductData
   end
 
   def self.update_product_descriptions(variant, match)
-    sleep(1)
+    sleep(0.5)
     oldtags = ''
 
 
@@ -174,7 +174,7 @@ class ProductData
     Published
     }
 
-      
+    binding.pry 
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}" : nil  }.join(',')
     product.tags = product.tags
 
