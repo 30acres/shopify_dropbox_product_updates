@@ -102,7 +102,7 @@ class ProductData
   end
 
   def self.update_product_descriptions(variant, match)
-    sleep(0.5)
+    sleep(1)
     oldtags = ''
 
 
@@ -124,7 +124,7 @@ class ProductData
     product.metafields_global_title_tag = product.title
     product.metafields_global_description_tag = desc
 
-    tags = Array.new(
+    tags = Array.new([
     'Category',
     'Sub-category 1',
     'Sub-category 2',
@@ -172,7 +172,7 @@ class ProductData
     'OverwriteShopifyDescOnImport',
     'Sold by',
     'Published'
-    )
+    ])
 
     product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}" : nil  }.join(',')
     product.tags = product.tags
