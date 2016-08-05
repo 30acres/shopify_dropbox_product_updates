@@ -104,6 +104,10 @@ class ProductData
   def self.update_product_descriptions(variant, match)
     puts '==== C R E D I T ===='
     puts ShopifyAPI.credit_used
+    if ShopifyAPI.credit_used >= 38
+      puts 'Chilling out...too much credit used!'
+      sleep(20)
+    end
     puts '---=============-----'
     sleep(1)
     oldtags = ''
