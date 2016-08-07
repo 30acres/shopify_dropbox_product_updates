@@ -51,8 +51,11 @@ class ProductData
         encoded_more = encoded.to_json
         puts encoded_more
         RawDatum.create(data: encoded_more, client_id: 0, status: 9)
+
       end
       Import.new(path: path, modified: modified).save!
+    else
+      @notifier.ping "[Product Data] No Changes"
     end
   end
 
