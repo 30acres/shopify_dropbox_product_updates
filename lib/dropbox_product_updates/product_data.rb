@@ -40,6 +40,9 @@ class ProductData
   end
 
   def get_csv
+
+    binding.pry
+
     CSV.parse(file, { headers: true }) do |product|
       # encoded = CSV.parse(product).to_hash.to_json
       encoded = product.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
