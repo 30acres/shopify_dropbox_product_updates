@@ -41,14 +41,18 @@ class ProductData
 
   def get_csv
 
-    binding.pry
+    already_imported = Import.where(path: path, modified: modified).any?
 
-    CSV.parse(file, { headers: true }) do |product|
-      # encoded = CSV.parse(product).to_hash.to_json
-      encoded = product.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
-      encoded_more = encoded.to_json
-      puts encoded_more
-      RawDatum.create(data: encoded_more, client_id: 0, status: 9)
+    unless already_imported
+      @notifier.ping "[Product Data] Files Changed"
+      CSV.parse(file, { headers: true }) do |product|
+        # encoded = CSV.parse(product).to_hash.to_json
+        encoded = product.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
+        encoded_more = encoded.to_json
+        puts encoded_more
+        RawDatum.create(data: encoded_more, client_id: 0, status: 9)
+      end
+      Import.new(path: path, modified: modified).save!
     end
   end
 
@@ -59,6 +63,11 @@ class ProductData
 
   def path
     connect_to_source.metadata(@path)['contents'][0]['path']
+  end
+
+  def modified
+    # "modified"=>"Wed, 03 Aug 2016 00:53:28 +0000",
+    connect_to_source.metadata(@path)['contents'][0]['modified']
   end
 
   def file
