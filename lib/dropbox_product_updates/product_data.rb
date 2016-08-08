@@ -141,64 +141,62 @@ class ProductData
     product.body_html = desc
     product.product_type = match.data['Category']
     product.vendor = match.data["Designer"]
-    product.title = match.data["Product Title"].gsub('  ',' ').split.map(&:capitalize).join(' ')
+    product.title = match.data["Product Title"].gsub('  ',' ')
 
     product.metafields_global_title_tag = product.title
     product.metafields_global_description_tag = desc
 
     tags = Array.new([
-    'Category',
-    'Sub-category 1',
-    'Sub-category 2',
+    'Source Country Size',
     'Condition',
     'Outer Condition Detail',
     'Inner Condition Detail',
     'Sole Condition Detail',
-    'Country',
-    'Source Country Size',
-    'Australian Size',
-    'Designer',
+    'Detailed Colour',
+    'Pattern',
+    'Detailed Material',
+    'Lining Material',
+    'Sole Material',
+    'Heel Height',
     'Width',
     'Height',
     'Depth',
-    'Heel Height',
-    'Colour',
-    'Detailed Colour',
-    'Detailed Material',
-    'Lining Material',
-    'Pattern',
-    'Gender',
-    'Season',
+    'Length',
     'Has Tag',
     'Has Original Box',
     'Has Dustbag',
-    'Vintage',
-    'Price',	
-    'Price (before Sale)',	
-    'IsConsigned',
-    'NumStockAvailable',
-    'Publish on Website',
-    'Vintage',
+    'Category',
+    'Sub-category 1',
+    'Sub-category 2',
+    'Country',
+    'Australian Size',
+    'Colour',
+    'Material',
+    'Gender',
+    'Season',
+    'Style',
     'Partywear',
     'Workwear',
     'Casual Wear',
+    'Vintage',
     'We Love',
     'Community Loves',
     'On Sale',
     'Recommended Retail Price',
-    'LocationTracking',
     'IsConsigned',
     'NumStockAvailable',
-    'IsDataValid',
-    'PhotoDone',
-    'OverwriteShopifyDescOnImport',
-    'Sold by',
-    'Published'
-    ])
+    'Publish on Website'
+  ])
+    tagz = []
+    letters = ('aa'..'zz').to_a
+    letters = letters.first
+    tags.each_with_index do |index, tag|
 
-    product.tags = tags.map { |tag| !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?)) ? "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}" : nil  }.join(',')
-    product.tags = product.tags + ", #{match.data['Designer']}"
-    product.tags = product.tags
+      if !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?))
+        tagz << "#{letters.next}:#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}"
+      end
+    end
+    product.tags = tagz.join(',')
 
     product_options = [] 
     ['Australian Size','Colour','Material'].each_with_index do |opt,index|
