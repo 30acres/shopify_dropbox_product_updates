@@ -191,9 +191,9 @@ class ProductData
     letters = ('aa'..'zz').to_a
     letters = letters.first
     tags.each do |tag|
-
+      letters = letters.next
       if !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?))
-        tagz << "#{letters.next}_#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}"
+        tagz << "#{letters}_#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}"
       end
     end
     product.tags = tagz.join(',')
