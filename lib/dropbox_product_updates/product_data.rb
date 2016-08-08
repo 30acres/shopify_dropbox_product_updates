@@ -194,12 +194,12 @@ class ProductData
     ordered_tags.each do |tag|
       letters = letters.next
       if !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?))
-        tagz << "#{letters}_#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}"
+        tagz << "#{letters}_#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}".strip
       end
     end
     unordered_tags.each do |tag|
       if !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?))
-        tagz << "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}"
+        tagz << "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}".strip
       end
     end
     product.tags = tagz.join(',')
