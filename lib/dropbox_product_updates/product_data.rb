@@ -146,7 +146,7 @@ class ProductData
     product.metafields_global_title_tag = product.title
     product.metafields_global_description_tag = desc
 
-    tags = Array.new([
+    ordered_tags = Array.new([
     'Source Country Size',
     'Condition',
     'Outer Condition Detail',
@@ -164,7 +164,8 @@ class ProductData
     'Length',
     'Has Tag',
     'Has Original Box',
-    'Has Dustbag',
+    'Has Dustbag'])
+    unordered_tags = Array.new([
     'Category',
     'Sub-category 1',
     'Sub-category 2',
@@ -190,10 +191,15 @@ class ProductData
     tagz = []
     letters = ('aa'..'zz').to_a
     letters = letters.first
-    tags.each do |tag|
+    ordered_tags.each do |tag|
       letters = letters.next
       if !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?))
         tagz << "#{letters}_#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}"
+      end
+    end
+    unordered_tags.each do |tag|
+      if !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?))
+        tagz << "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub(',','')}"
       end
     end
     product.tags = tagz.join(',')
