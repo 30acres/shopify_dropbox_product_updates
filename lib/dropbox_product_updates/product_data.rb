@@ -150,7 +150,7 @@ class ProductData
       product.title = product.title.gsub(cd[0],cd[1])
     end
 
-    desc = match.data["Product Description"]
+    desc = match.data["Description"]
     product.body_html = desc
     product.product_type = match.data['Category']
 
