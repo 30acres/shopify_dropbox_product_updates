@@ -137,10 +137,10 @@ class ProductData
       product = ShopifyAPI::Product.find(variant.product_id)
       oldtags = product.tags
     end
-    designer = match.data["Designer"]
+    designer = match.data["Designer"].strip
     
     clean_designers.each do |designer|
-      if designer == designer[0]
+      if designer.downcase == designer[0].downcase
         designer = designer[1]
       end
     end
@@ -153,8 +153,8 @@ class ProductData
     desc = match.data["Product Description"]
     product.body_html = desc
     product.product_type = match.data['Category']
+
     product.vendor = designer
-    
 
     product.metafields_global_title_tag = product.title
     product.metafields_global_description_tag = desc
@@ -215,7 +215,7 @@ class ProductData
         tagz << "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub('  ',' ').gsub(',','')}".strip
       end
     end
-    product.tags << "Designer: #{designer}".strip
+    tagz << "Designer: #{designer}".strip
     product.tags = tagz.join(',')
 
     product_options = [] 
