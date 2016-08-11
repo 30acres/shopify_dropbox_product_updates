@@ -139,15 +139,15 @@ class ProductData
     end
     designer = match.data["Designer"].strip
     
-    clean_designers.each do |designer|
-      if designer.downcase == designer[0].downcase
-        designer = designer[1]
+    clean_designers.each do |cd|
+      if designer.downcase == cd[0].downcase
+        designer = cd[1]
       end
     end
 
     product.title = match.data["Product Title"].gsub('  ',' ')
-    clean_designers.each do |designer|
-      product.title = product.title.gsub(designer[0],designer[1])
+    clean_designers.each do |cd|
+      product.title = product.title.gsub(cd[0],cd[1])
     end
 
     desc = match.data["Product Description"]
