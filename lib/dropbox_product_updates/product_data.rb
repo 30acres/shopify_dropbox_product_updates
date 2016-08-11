@@ -215,7 +215,7 @@ class ProductData
         tagz << "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub('  ',' ').gsub(',','')}".strip
       end
     end
-    product.tags << "Designer: #{clean_designer}".strip
+    product.tags << "Designer: #{designer}".strip
     product.tags = tagz.join(',')
 
     product_options = [] 
