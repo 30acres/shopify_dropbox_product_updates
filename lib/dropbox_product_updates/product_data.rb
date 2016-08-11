@@ -126,6 +126,7 @@ class ProductData
     puts '---=============-----'
     sleep(1)
     oldtags = ''
+    clean_designers = [['Cline','Céline'],['lvaro','Álvaro'],['Vanessa Bruno (ath)','Vanessa Bruno (athé)'],['Marsll','Marsèll'],['Hrve Lger','Hérve Léger'],['Alaa','Alaïa']]
 
 
     if variant.nil?
@@ -136,12 +137,24 @@ class ProductData
       product = ShopifyAPI::Product.find(variant.product_id)
       oldtags = product.tags
     end
+    designer = match.data["Designer"]
+    
+    clean_designers.each do |designer|
+      if designer == designer[0]
+        designer = designer[1]
+      end
+    end
+
+    product.title = match.data["Product Title"].gsub('  ',' ')
+    clean_designers.each do |designer|
+      product.title = product.title.gsub(designer[0],designer[1])
+    end
 
     desc = match.data["Product Description"]
     product.body_html = desc
     product.product_type = match.data['Category']
-    product.vendor = match.data["Designer"]
-    product.title = match.data["Product Title"].gsub('  ',' ')
+    product.vendor = designer
+    
 
     product.metafields_global_title_tag = product.title
     product.metafields_global_description_tag = desc
@@ -166,7 +179,6 @@ class ProductData
     'Has Original Box',
     'Has Dustbag'])
     unordered_tags = Array.new([
-      'Designer',
     'Category',
     'Sub-category 1',
     'Sub-category 2',
@@ -203,6 +215,7 @@ class ProductData
         tagz << "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub('  ',' ').gsub(',','')}".strip
       end
     end
+    product.tags << "Designer: #{clean_designer}".strip
     product.tags = tagz.join(',')
 
     product_options = [] 
