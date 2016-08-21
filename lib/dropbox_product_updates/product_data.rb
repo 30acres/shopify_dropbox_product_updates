@@ -265,11 +265,13 @@ class ProductData
         end
     end
 
+    compare_at_price = (match.data["Price (before Sale)"].downcase != "n/a" or !match.data["Price (before Sale)"].blank?) ? match.data["Price (before Sale)"] : nil
+
     v.product_id = product.id
     v.price = match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f
     v.sku = match.data["*ItemCode"]
     v.grams = match.data["Weight (grams)"].to_i
-    v.compare_at_price = match.data["Price (before Sale)"]
+    v.compare_at_price = compare_at_price
     
     v.inventory_quantity = match.data["NumStockAvailable"]
     v.old_inventory_quantity = match.data["NumStockAvailable"]
@@ -283,7 +285,7 @@ class ProductData
     # weight: match.data["Weight (grams)"].to_i/100,
     v.weight_unit = "g"
     puts v.inspect
-    binding.pry
+    # binding.pry
     product.variants = [v]
     product.save!
     # v.save!
