@@ -265,7 +265,7 @@ class ProductData
         end
     end
 
-    compare_at_price = (match.data["Price (before Sale)"].downcase != "n/a" or !match.data["Price (before Sale)"].blank?) ? match.data["Price (before Sale)"] : nil
+    compare_at_price = Float(match.data["Price (before Sale)"].to_s.gsub('$','')) ? match.data["Price (before Sale)"] : nil
 
     v.product_id = product.id
     v.price = match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f
