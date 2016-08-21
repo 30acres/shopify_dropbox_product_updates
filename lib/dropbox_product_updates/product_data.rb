@@ -283,7 +283,7 @@ class ProductData
     # weight: match.data["Weight (grams)"].to_i/100,
     v.weight_unit = "g"
     puts v.inspect
-    # binding.pry
+    binding.pry
     product.variants = [v]
     product.save!
     # v.save!
