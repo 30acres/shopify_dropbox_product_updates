@@ -229,8 +229,8 @@ class ProductData
 
     puts "#{product.title} :: UPDATED!!!"
     if match.data["Publish on Website"] == 'Yes'
-      binding.pry
-      unless product.id and !product.published_at.nil? and product.published_at <= DateTime.now - 10.hours
+      # binding.pry
+      if !product.id or (product.id and product.published_at.nil?)
         product.published_at = DateTime.now - 10.hours
       end
     else
